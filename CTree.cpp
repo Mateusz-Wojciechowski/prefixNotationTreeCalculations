@@ -156,7 +156,7 @@ string CTree::sTreeToStr(CNode *c_node){
     return result;
 }
 
-void CTree::vSubstituteVariables(CNode *c_node, vector<string> values, int i_index){
+void CTree::vSubstituteVariables(CNode *c_node, vector<string> values, int &i_index){
     if(c_node==NULL){
         return;
     }
@@ -176,6 +176,26 @@ void CTree::vSubstituteVariables(CNode *c_node, vector<string> values, int i_ind
     vector<CNode*> children = c_node->getChildren();
     for(int i=0; i<children.size(); i++){
         vSubstituteVariables(children[i], values, i_index);
+    }
+}
+
+CNode* CTree::findLastLeaf(CNode *c_node){
+    if(c_node==NULL){
+        return NULL;
+    }
+
+    if(c_node->getChildren().empty()){
+        return c_node;
+    }
+
+    vector<CNode*> children = c_node->getChildren();
+    return findLastLeaf(children.back());
+}
+
+void CTree::vJoinTrees(CNode* c_new_root){
+    CNode* leaf = findLastLeaf(root);
+    if(leaf!=NULL){
+        leaf->vReplaceNode(c_new_root);
     }
 }
 

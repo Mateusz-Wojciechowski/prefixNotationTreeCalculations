@@ -31,6 +31,11 @@ void CUserInterface::vRun() {
             s_current_prefix = s_operation;
             CTree tree(s_operation);
             c_tree = tree;
+            if(c_tree.getWasChanged()){
+                cout << "The tree was changed, the new prefix is: " << endl;
+                s_current_prefix = c_tree.sTreeToStr(c_tree.getRoot());
+                cout << s_current_prefix << endl;
+            }
         }
 
         if(s_command=="print"){
@@ -55,8 +60,18 @@ void CUserInterface::vRun() {
                     values.push_back(string(1, s_operation[i]));
                 }
             }
-            c_tree.vSubstituteVariables(c_tree.getRoot(), values, 0);
-            cout << c_tree.iCalculateTreeValue(c_tree.getRoot()) << endl;
+            set<string> variables;
+            variables = c_tree.vGetUniqueVariables(c_tree.getRoot(), variables);
+
+            if(values.size()<variables.size()){
+                cout << "Not enough values to calculate expression" << endl;
+            }
+
+            else{
+                int i_index = 0;
+                c_tree.vSubstituteVariables(c_tree.getRoot(), values, i_index);
+                cout << "Result: " << c_tree.iCalculateTreeValue(c_tree.getRoot()) << endl;
+            }
         }
 
         if(s_command=="vars"){

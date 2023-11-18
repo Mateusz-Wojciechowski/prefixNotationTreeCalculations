@@ -17,6 +17,7 @@ public:
     CNode* getParent() const;
     string getValue();
     vector<CNode*> getChildren();
+    void vReplaceNode(CNode* c_new_node);
     void setValue(string s_new_value);
 private:
     string s_value;

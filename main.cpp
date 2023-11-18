@@ -15,10 +15,13 @@ int main() {
     c_ui.vRun();
 
     // + sin 0 8
-    // metoda tworzenia drzewa powinna ustawiac flage czy wyrazenie zostalo zmienione (done)
-    // i uwzglednic to potem przy enter (done)
-    // przydalby sie enum w ktorym beda zapisane operatory i odpowiadajace im wagi
+    /// metoda tworzenia drzewa powinna ustawiac flage czy wyrazenie zostalo zmienione (done)
+    /// i uwzglednic to potem przy enter (done)
+    /// przydalby sie enum w ktorym beda zapisane operatory i odpowiadajace im wagi (done bez enuma)
     // trzeba pamietac o dodaniu destruktorow np w CTree
-    // jakos trzeba obsluzyc liczby ujemne
-    // trzeba ustawic zeby po zmianie przez comp print wyswietlal odpowiednie drzewo (done)
+    /// jakos trzeba obsluzyc liczby ujemne (done)
+    /// trzeba ustawic zeby po zmianie przez comp print wyswietlal odpowiednie drzewo (done)
+    /// sprawdzic czy przy comp zostalo podane wystarczajaco wartosci do podstawienia pod zmienne (done)
+    // nalezy wykonac jeszcze pomijanie znakow specjalnych jesli znajduja sie w formule
+    // zredukowac drzewo jesli wpisane jest na przyklad za duzo operandow
 }

@@ -24,7 +24,9 @@ public:
     void vCreateMap();
     string sTreeToStr(CNode* c_node);
     set<string> vGetUniqueVariables(CNode* c_node, set<string>& variables);
-    void vSubstituteVariables(CNode* c_node, vector<string> values, int i_index);
+    void vSubstituteVariables(CNode* c_node, vector<string> values, int &i_index);
+    CNode* findLastLeaf(CNode* c_node);
+    void vJoinTrees(CNode* c_new_root);
     bool bIsVariable(string s_value);
     bool bIsNum(string s_value);
     bool getWasChanged();
