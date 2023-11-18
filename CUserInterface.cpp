@@ -24,8 +24,14 @@ void CUserInterface::vRun() {
 
         int i_space_pos = s_full_command.find(" ");
 
-        s_command = s_full_command.substr(0, i_space_pos);
-        s_operation = s_full_command.substr(i_space_pos + 1);
+        if(i_space_pos==-1){
+            s_command = s_full_command.substr(0);
+            s_operation = "";
+        }
+        else{
+            s_command = s_full_command.substr(0, i_space_pos);
+            s_operation = s_full_command.substr(i_space_pos + 1);
+        }
 
         if(s_command=="enter"){
             s_current_prefix = s_operation;
@@ -87,6 +93,16 @@ void CUserInterface::vRun() {
                     cout << *it << endl;
                 }
             }
+        }
+
+        if(s_command=="join"){
+            CTree c_second_tree(s_operation);
+            CTree c_result_tree;
+            c_result_tree = c_tree + c_second_tree;
+            s_current_prefix = c_result_tree.sTreeToStr(c_result_tree.getRoot());
+            cout << "Prefix after join: " << s_current_prefix << endl;
+            c_tree = c_result_tree;
+            c_result_tree.vPrintTree();
         }
 
         if(s_command=="exit"){

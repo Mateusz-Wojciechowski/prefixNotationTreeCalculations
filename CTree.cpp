@@ -20,6 +20,10 @@ CTree::CTree(){
     vCreateMap();
 }
 
+CTree::~CTree(){
+    vDeleteTree(root);
+}
+
 CNode* CTree::vCreateTree(string s_prefix, int &i_index){
     while (i_index < s_prefix.size() && s_prefix[i_index] == ' '){
         i_index++;
@@ -199,12 +203,57 @@ void CTree::vJoinTrees(CNode* c_new_root){
     }
 }
 
+void CTree::vDeleteTree(CNode *c_node){
+    if(c_node==NULL){
+        return;
+    }
+
+    const vector<CNode*>& children = c_node->getChildren();
+    for(int i=0; i<children.size(); i++){
+        vDeleteTree(children[i]);
+    }
+    delete c_node;
+}
+
+CNode* CTree::copyTree(CNode *c_node){
+    if(c_node==NULL){
+        return NULL;
+    }
+
+    CNode* c_new_node = new CNode(c_node->getValue());
+    const vector<CNode*>& children = c_node->getChildren();
+
+    for(int i=0; i<children.size(); i++){
+        c_new_node->vAdd(copyTree(children[i]));
+    }
+    return c_new_node;
+}
+
+CTree& CTree::operator=(const CTree &c_other){
+    if(this!=&c_other){
+        vDeleteTree(root);
+        root = copyTree(c_other.root);
+    }
+
+    return *this;
+}
+
+CTree CTree::operator+(const CTree &c_other){
+    CTree c_result;
+    c_result.root = copyTree(this->root);
+
+    CNode* c_second_root = copyTree(c_other.root);
+    c_result.vJoinTrees(c_second_root);
+
+    return c_result;
+}
+
 bool CTree::bIsVariable(string s_value){
     return !bIsOperator(s_value) && !bIsNum(s_value);
 }
 
 bool CTree::bIsNum(string s_value){
-    for (int i = 0; i < s_value.size(); i++) {
+    for (int i = 0; i < s_value.size(); i++){
         if (!isdigit(s_value[i])) {
             return false;
         }

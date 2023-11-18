@@ -49,9 +49,10 @@ vector<CNode*> CNode::getChildren() {
 
 void CNode::vReplaceNode(CNode *c_new_node){
     if(c_parent!=NULL){
+        vector<CNode*>& children = c_parent->c_children;
         for(int i=0; i<c_parent->c_children.size(); i++){
-            if(c_parent->c_children[i]==this){
-                c_parent->getChildren()[i] = c_new_node;
+            if(children[i]==this){
+                children[i] = c_new_node;
             }
         }
     }
