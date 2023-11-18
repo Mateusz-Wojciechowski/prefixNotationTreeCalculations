@@ -27,7 +27,7 @@ int main() {
     // nalezy wykonac jeszcze pomijanie znakow specjalnych jesli znajduja sie w formule
     // zredukowac drzewo jesli wpisane jest na przyklad za duzo operandow
     // destruktor musi usuwac noda a nie czysci tablice
-    // dodac obsluge dwucyfrowych liczb przy compie
-    // sprawdzic czy nie jest wiecej danych niz zmiennych
+    /// dodac obsluge dwucyfrowych liczb przy comp (done)
+    /// sprawdzic czy nie jest wiecej danych niz zmiennych (done)
     // comp ma nie zmieniac drzewa
 }

@@ -2,6 +2,7 @@
 #include "CTree.h"
 #include "iostream"
 #include "string"
+#include "sstream"
 
 using namespace std;
 
@@ -61,16 +62,23 @@ void CUserInterface::vRun() {
 
         if(s_command=="comp"){
             vector<string> values;
-            for(int i=0; i<s_operation.size(); i++){
-                if(s_operation[i]!=' '){
-                    values.push_back(string(1, s_operation[i]));
-                }
+
+            istringstream iss(s_operation);
+            string token;
+
+            while(iss >> token){
+                values.push_back(token);
             }
+
             set<string> variables;
             variables = c_tree.vGetUniqueVariables(c_tree.getRoot(), variables);
 
             if(values.size()<variables.size()){
                 cout << "Not enough values to calculate expression" << endl;
+            }
+
+            else if(values.size()>variables.size()){
+                cout << "Too many values given for calculation" << endl;
             }
 
             else{
