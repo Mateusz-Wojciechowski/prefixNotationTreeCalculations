@@ -4,6 +4,7 @@
 #include "iostream"
 #include "string"
 #include "sstream"
+#include "cstdlib"
 
 using namespace std;
 
@@ -28,7 +29,7 @@ void CUserInterface::vRun() {
 
         if(i_space_pos==-1){
             s_command = s_full_command.substr(0);
-            s_operation = "";
+            s_operation = S_EMPTY_STRING;
         }
         else{
             s_command = s_full_command.substr(0, i_space_pos);
@@ -39,9 +40,10 @@ void CUserInterface::vRun() {
             s_current_prefix = s_operation;
             CTree tree(s_operation);
             c_tree = tree;
-            if(c_tree.getWasChanged()){
+            string s_new_prefix = c_tree.sTreeToStr(c_tree.getRoot());
+            if(s_current_prefix + S_SPACE != s_new_prefix){
                 cout << S_TREE_CHANGED_COMM << endl;
-                s_current_prefix = c_tree.sTreeToStr(c_tree.getRoot());
+                s_current_prefix = s_new_prefix;
                 cout << s_current_prefix << endl;
             }
         }
@@ -74,6 +76,7 @@ void CUserInterface::vRun() {
             set<string> variables;
             variables = c_tree.vGetUniqueVariables(c_tree.getRoot(), variables);
 
+
             if(values.size()<variables.size()){
                 cout << S_NOT_ENOUGH_VALUES_COMM << endl;
             }
@@ -83,8 +86,14 @@ void CUserInterface::vRun() {
             }
 
             else{
-                int i_index = 0;
-                cout << S_RESULT_COMM << c_tree.iCalculateTreeValue(c_tree.getRoot(), i_index, values) << endl;
+                map<string, int> variable_map;
+                set<string>::const_iterator it;
+                int i_iter = 0;
+                for (it=variables.begin(); it!=variables.end(); it++) {
+                    variable_map[*it] = atoi(values[i_iter].c_str());
+                    i_iter++;
+                }
+                cout << S_RESULT_COMM << c_tree.iCalculateTreeValue(c_tree.getRoot(), variable_map) << endl;
             }
         }
 

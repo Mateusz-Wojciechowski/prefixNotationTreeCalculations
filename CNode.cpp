@@ -4,7 +4,6 @@
 #include "vector"
 using namespace std;
 
-// konstruktor do ustawiania roota
 CNode::CNode(string s_Value) {
     c_parent = NULL;
     s_value = s_Value;
@@ -16,10 +15,9 @@ CNode::CNode(string s_Value, CNode* parent){
 }
 
 CNode::~CNode(){
-    if(c_parent!=NULL){
-        c_parent->vRemoveChild(this);
+    for(int i=0; i<c_children.size(); i++){
+        delete c_children[i];
     }
-    c_parent = NULL;
 }
 
 void CNode::vRemoveChild(CNode *child){

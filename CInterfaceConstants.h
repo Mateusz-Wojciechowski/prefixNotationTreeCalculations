@@ -9,4 +9,5 @@ const string S_TOO_MANY_VALUES_COMM = "Too many values given for calculation";
 const string S_RESULT_COMM = "Result: ";
 const string S_NO_VARIABLES_IN_TREE_COMM = "No variables in the tree";
 const string S_SPACE = " ";
+const string S_EMPTY_STRING = "";
 #endif //LAB3_TEP_CINTERFACECONSTANTS_H

@@ -8,7 +8,7 @@ COperation::COperation(OperationFunction op_Fun){
     op_fun = op_Fun;
 }
 
-int COperation::execute(const vector<int> &operands){
+int COperation::execute(const vector<int> &operands)const{
     return op_fun(operands);
 }
 

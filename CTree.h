@@ -20,7 +20,7 @@ public:
     CNode* getRoot();
     void vPrintNode(CNode* c_node, int i_depth);
     void vPrintTree();
-    int iCalculateTreeValue(CNode* c_node, int &i_index, const vector<string>& values=vector<string>());
+    int iCalculateTreeValue(CNode* c_node, const map<string, int>& values=map<string, int>());
     int getOperandsNeeded(const string op);
     void vCreateMap();
     string sTreeToStr(CNode* c_node);

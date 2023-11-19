@@ -23,7 +23,7 @@ CTree::CTree(){
 }
 
 CTree::~CTree(){
-    vDeleteTree(root);
+    delete root;
 }
 
 CNode* CTree::vCreateTree(string s_prefix, int &i_index){
@@ -42,12 +42,8 @@ CNode* CTree::vCreateTree(string s_prefix, int &i_index){
 
     string s_expression = s_prefix.substr(i_start_index, i_index - i_start_index);
 
-    if(!bIsOperator(s_expression) && i_index < s_prefix.size()){
-        b_was_changed = true;
-    }
-
     if (!bIsOperator(s_expression) && !bIsVariable(s_expression) && !bIsNum(s_expression)) {
-        cout << "Invalid value was given: " << s_expression << endl;
+        cout << S_INVALID_VALUE_COMM << s_expression << endl;
         b_was_changed = true;
         return vCreateTree(s_prefix, i_index);
     }
@@ -109,16 +105,18 @@ void CTree::vPrintNode(CNode* node, int i_depth) {
     }
 }
 
-int CTree::iCalculateTreeValue(CNode *c_node, int &i_index, const vector<string> &variables){
+int CTree::iCalculateTreeValue(CNode *c_node, const map<string, int> &variables){
     if (c_node == NULL) {
         return 0;
     }
 
     if (c_node->getChildren().empty()) {
-        if(bIsVariable(c_node->getValue())){
-            return atoi(variables[i_index++].c_str());
+        if (bIsVariable(c_node->getValue())) {
+            std::map<std::string, int>::const_iterator varIt = variables.find(c_node->getValue());
+            if (varIt != variables.end()) {
+                return varIt->second;
+            }
         }
-
         return atoi(c_node->getValue().c_str());
     }
 
@@ -126,11 +124,10 @@ int CTree::iCalculateTreeValue(CNode *c_node, int &i_index, const vector<string>
 
     const vector<CNode*>& children = c_node->getChildren();
     for (vector<CNode*>::const_iterator it = children.begin(); it != children.end(); ++it) {
-        results.push_back(iCalculateTreeValue(*it, i_index, variables));
+        results.push_back(iCalculateTreeValue(*it, variables));
     }
 
-    map<std::string, COperation>::iterator op_it = operations.find(c_node->getValue());
-
+    map<string, COperation>::const_iterator op_it = operations.find(c_node->getValue());
     return op_it->second.execute(results);
 }
 
@@ -148,9 +145,9 @@ set<string> CTree::vGetUniqueVariables(CNode *c_node, set<string>& variables){
         return variables;
     }
 
-    string value = c_node->getValue();
+    string s_value = c_node->getValue();
     if(bIsVariable(c_node->getValue())){
-        variables.insert(value);
+        variables.insert(s_value);
     }
 
     vector<CNode*> children = c_node->getChildren();
@@ -189,7 +186,7 @@ void CTree::vSubstituteVariables(CNode *c_node, vector<string> values, int &i_in
             i_index++;
         }
         else{
-            cout << "Not enough values" << endl;
+            cout << S_NOT_ENOUGH_VALUES_COMM << endl;
             return;
         }
     }
@@ -248,7 +245,7 @@ CNode* CTree::copyTree(CNode *c_node){
 
 CTree& CTree::operator=(const CTree &c_other){
     if(this!=&c_other){
-        vDeleteTree(root);
+//        vDeleteTree(root);
         root = copyTree(c_other.root);
         b_was_changed = c_other.b_was_changed;
         operations = c_other.operations;
@@ -269,11 +266,6 @@ CTree CTree::operator+(const CTree &c_other){
 
 bool CTree::bIsVariable(string s_value){
     if(!bIsOperator(s_value) && !bIsNum(s_value)){
-        for(int i=0; i<s_value.size(); i++){
-            if(!isalpha(s_value[i]) && !isdigit(s_value[i])){
-                cout << "Found a special char, we ignore it" << endl;
-            }
-        }
 
         for(int i=0; i<s_value.size(); i++){
             if(isalpha(s_value[i])){

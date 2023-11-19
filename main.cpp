@@ -20,16 +20,17 @@ int main() {
     /// metoda tworzenia drzewa powinna ustawiac flage czy wyrazenie zostalo zmienione (done)
     /// i uwzglednic to potem przy enter (done)
     /// przydalby sie enum w ktorym beda zapisane operatory i odpowiadajace im wagi (done bez enuma)
-    // trzeba pamietac o dodaniu destruktorow np w CTree
+    /// trzeba pamietac o dodaniu destruktorow np w CTree (done)
     /// jakos trzeba obsluzyc liczby ujemne (done)
     /// trzeba ustawic zeby po zmianie przez comp print wyswietlal odpowiednie drzewo (done)
     /// sprawdzic czy przy comp zostalo podane wystarczajaco wartosci do podstawienia pod zmienne (done)
     /// nalezy wykonac jeszcze pomijanie znakow specjalnych jesli znajduja sie w formule (done)
     /// zredukowac drzewo jesli wpisane jest na przyklad za duzo operandow (done)
-    // destruktor musi usuwac noda a nie czysci tablice
+    //// destruktor musi usuwac noda a nie czysci tablice (done)
     /// dodac obsluge dwucyfrowych liczb przy comp (done)
     /// sprawdzic czy nie jest wiecej danych niz zmiennych (done)
     /// comp ma nie zmieniac drzewa (done)
     /// pozmieniac ewentualne wartosci >2 na stale (done)
+    // nie bedzie dzialac jesli jedna zmienna wystapi wiecej niz jeden raz
     // zmodyfikowac wypisywanie info o specjalnym znaku
 }
