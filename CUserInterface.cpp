@@ -1,5 +1,6 @@
 #include "CUserInterface.h"
 #include "CTree.h"
+#include "CInterfaceConstants.h"
 #include "iostream"
 #include "string"
 #include "sstream"
@@ -7,7 +8,7 @@
 using namespace std;
 
 CUserInterface::CUserInterface() {
-    CTree tree(" ");
+    CTree tree(S_SPACE);
     c_tree = tree;
 }
 
@@ -19,11 +20,11 @@ void CUserInterface::vRun() {
     bool b_exit = false;
 
     do{
-        cout << "Enter command:  ";
+        cout << S_ENTER_COMMAND;
         getline(cin, s_full_command);
         cout << endl;
 
-        int i_space_pos = s_full_command.find(" ");
+        int i_space_pos = s_full_command.find(S_SPACE);
 
         if(i_space_pos==-1){
             s_command = s_full_command.substr(0);
@@ -39,14 +40,14 @@ void CUserInterface::vRun() {
             CTree tree(s_operation);
             c_tree = tree;
             if(c_tree.getWasChanged()){
-                cout << "The tree was changed, the new prefix is: " << endl;
+                cout << S_TREE_CHANGED_COMM << endl;
                 s_current_prefix = c_tree.sTreeToStr(c_tree.getRoot());
                 cout << s_current_prefix << endl;
             }
         }
 
         if(s_command=="print"){
-            cout << "Prefix notation: ";
+            cout << S_PREFIX_FORM_COMM;
 
             if(c_tree.getWasChanged()){
                 s_current_prefix = c_tree.sTreeToStr(c_tree.getRoot());
@@ -74,17 +75,16 @@ void CUserInterface::vRun() {
             variables = c_tree.vGetUniqueVariables(c_tree.getRoot(), variables);
 
             if(values.size()<variables.size()){
-                cout << "Not enough values to calculate expression" << endl;
+                cout << S_NOT_ENOUGH_VALUES_COMM << endl;
             }
 
             else if(values.size()>variables.size()){
-                cout << "Too many values given for calculation" << endl;
+                cout << S_TOO_MANY_VALUES_COMM << endl;
             }
 
             else{
                 int i_index = 0;
-                c_tree.vSubstituteVariables(c_tree.getRoot(), values, i_index);
-                cout << "Result: " << c_tree.iCalculateTreeValue(c_tree.getRoot()) << endl;
+                cout << S_RESULT_COMM << c_tree.iCalculateTreeValue(c_tree.getRoot(), i_index, values) << endl;
             }
         }
 
@@ -92,7 +92,7 @@ void CUserInterface::vRun() {
             set<string> variables;
             variables = c_tree.vGetUniqueVariables(c_tree.getRoot(), variables);
             if(variables.size()==0){
-                cout << "No variables in the tree" << endl;
+                cout << S_NO_VARIABLES_IN_TREE_COMM << endl;
             }
 
             else{
@@ -108,7 +108,7 @@ void CUserInterface::vRun() {
             CTree c_result_tree;
             c_result_tree = c_tree + c_second_tree;
             s_current_prefix = c_result_tree.sTreeToStr(c_result_tree.getRoot());
-            cout << "Prefix after join: " << s_current_prefix << endl;
+            cout << S_PREFIX_FORM_COMM << s_current_prefix << endl;
             c_tree = c_result_tree;
             c_result_tree.vPrintTree();
         }

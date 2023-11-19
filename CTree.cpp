@@ -1,9 +1,11 @@
 #include "CTree.h"
 #include "CNode.h"
+#include "Constants.h"
 #include "string"
 #include "iostream"
 #include "vector"
 #include "cstdlib"
+#include "cctype"
 using namespace std;
 
 CTree::CTree(string s_prefix){
@@ -39,44 +41,55 @@ CNode* CTree::vCreateTree(string s_prefix, int &i_index){
     }
 
     string s_expression = s_prefix.substr(i_start_index, i_index - i_start_index);
+
+    if(!bIsOperator(s_expression) && i_index < s_prefix.size()){
+        b_was_changed = true;
+    }
+
+    if (!bIsOperator(s_expression) && !bIsVariable(s_expression) && !bIsNum(s_expression)) {
+        cout << "Invalid value was given: " << s_expression << endl;
+        b_was_changed = true;
+        return vCreateTree(s_prefix, i_index);
+    }
+
     CNode* c_node = new CNode(s_expression);
+
 
     if (bIsOperator(s_expression)){
         int operandsNeeded = getOperandsNeeded(s_expression);
         for (int i = 0; i < operandsNeeded; i++){
+            CNode* c_child = NULL;
+
             while (i_index < s_prefix.size() && s_prefix[i_index] == ' ') {
                 i_index++;
             }
+
             if (i_index < s_prefix.size()){
-                CNode* c_child = vCreateTree(s_prefix, i_index);
-                if (c_child != NULL) {
-                    c_node->vAdd(c_child);
-                }
-                else{
-                    delete c_node;
-                }
+                c_child = vCreateTree(s_prefix, i_index);
             }
 
-            else{
-                CNode* c_default = new CNode("1");
-                c_node->vAdd(c_default);
+            if (c_child == NULL) {
+                c_child = new CNode("1");
                 b_was_changed = true;
             }
+
+            c_node->vAdd(c_child);
         }
     }
+
     return c_node;
 }
 
 int CTree::getOperandsNeeded(const string op) {
     if(op=="+" || op=="-" || op=="*" || op=="/"){
-        return 2;
+        return I_BINARY_OP_ARGS;
     }
 
     if(op=="sin" || op=="cos"){
-        return 1;
+        return I_SINGLE_OP_ARGS;
     }
 
-    else return -1;
+    else return I_OP_NOT_FOUND;
 }
 
 void CTree::vPrintTree() {
@@ -88,20 +101,24 @@ void CTree::vPrintNode(CNode* node, int i_depth) {
         return;
     }
 
-    std::string indent = std::string(i_depth * 2, ' ');
-    std::cout << indent << node->getValue() << std::endl;
+    string indent = string(i_depth * I_PRINTING_OFFSET, ' ');
+    cout << indent << node->getValue() << endl;
 
     for (int i=0; i<node->getChildren().size(); i++) {
         vPrintNode(node->getChildren()[i], i_depth + 1);
     }
 }
 
-int CTree::iCalculateTreeValue(CNode *c_node){
+int CTree::iCalculateTreeValue(CNode *c_node, int &i_index, const vector<string> &variables){
     if (c_node == NULL) {
         return 0;
     }
 
     if (c_node->getChildren().empty()) {
+        if(bIsVariable(c_node->getValue())){
+            return atoi(variables[i_index++].c_str());
+        }
+
         return atoi(c_node->getValue().c_str());
     }
 
@@ -109,10 +126,10 @@ int CTree::iCalculateTreeValue(CNode *c_node){
 
     const vector<CNode*>& children = c_node->getChildren();
     for (vector<CNode*>::const_iterator it = children.begin(); it != children.end(); ++it) {
-        results.push_back(iCalculateTreeValue(*it));
+        results.push_back(iCalculateTreeValue(*it, i_index, variables));
     }
 
-    std::map<std::string, COperation>::iterator op_it = operations.find(c_node->getValue());
+    map<std::string, COperation>::iterator op_it = operations.find(c_node->getValue());
 
     return op_it->second.execute(results);
 }
@@ -233,6 +250,8 @@ CTree& CTree::operator=(const CTree &c_other){
     if(this!=&c_other){
         vDeleteTree(root);
         root = copyTree(c_other.root);
+        b_was_changed = c_other.b_was_changed;
+        operations = c_other.operations;
     }
 
     return *this;
@@ -249,7 +268,21 @@ CTree CTree::operator+(const CTree &c_other){
 }
 
 bool CTree::bIsVariable(string s_value){
-    return !bIsOperator(s_value) && !bIsNum(s_value);
+    if(!bIsOperator(s_value) && !bIsNum(s_value)){
+        for(int i=0; i<s_value.size(); i++){
+            if(!isalpha(s_value[i]) && !isdigit(s_value[i])){
+                cout << "Found a special char, we ignore it" << endl;
+            }
+        }
+
+        for(int i=0; i<s_value.size(); i++){
+            if(isalpha(s_value[i])){
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 bool CTree::bIsNum(string s_value){

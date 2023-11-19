@@ -4,7 +4,7 @@
 using namespace std;
 int main() {
 //    set<string> variables;
-//    CTree c_tree("+ * 1 2 3");
+//    CTree c_tree("+ % 1");
 //    CTree c_tree2("+ 4 5");
 //    CTree c_result = c_tree + c_tree2;
 //    variables = c_tree.vGetUniqueVariables(c_tree.getRoot(), variables);
@@ -24,10 +24,12 @@ int main() {
     /// jakos trzeba obsluzyc liczby ujemne (done)
     /// trzeba ustawic zeby po zmianie przez comp print wyswietlal odpowiednie drzewo (done)
     /// sprawdzic czy przy comp zostalo podane wystarczajaco wartosci do podstawienia pod zmienne (done)
-    // nalezy wykonac jeszcze pomijanie znakow specjalnych jesli znajduja sie w formule
-    // zredukowac drzewo jesli wpisane jest na przyklad za duzo operandow
+    /// nalezy wykonac jeszcze pomijanie znakow specjalnych jesli znajduja sie w formule (done)
+    /// zredukowac drzewo jesli wpisane jest na przyklad za duzo operandow (done)
     // destruktor musi usuwac noda a nie czysci tablice
     /// dodac obsluge dwucyfrowych liczb przy comp (done)
     /// sprawdzic czy nie jest wiecej danych niz zmiennych (done)
-    // comp ma nie zmieniac drzewa
+    /// comp ma nie zmieniac drzewa (done)
+    /// pozmieniac ewentualne wartosci >2 na stale (done)
+    // zmodyfikowac wypisywanie info o specjalnym znaku
 }
