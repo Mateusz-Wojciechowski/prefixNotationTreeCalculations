@@ -36,7 +36,7 @@ void CUserInterface::vRun() {
             s_operation = s_full_command.substr(i_space_pos + 1);
         }
 
-        if(s_command=="enter"){
+        if(s_command==S_ENTER){
             s_current_prefix = s_operation;
             CTree tree(s_operation);
             c_tree = tree;
@@ -48,7 +48,7 @@ void CUserInterface::vRun() {
             }
         }
 
-        if(s_command=="print"){
+        if(s_command==S_PRINT){
             cout << S_PREFIX_FORM_COMM;
 
             if(c_tree.getWasChanged()){
@@ -63,7 +63,7 @@ void CUserInterface::vRun() {
             c_tree.vPrintTree();
         }
 
-        if(s_command=="comp"){
+        if(s_command==S_COMP){
             vector<string> values;
 
             istringstream iss(s_operation);
@@ -93,11 +93,17 @@ void CUserInterface::vRun() {
                     variable_map[*it] = atoi(values[i_iter].c_str());
                     i_iter++;
                 }
-                cout << S_RESULT_COMM << c_tree.iCalculateTreeValue(c_tree.getRoot(), variable_map) << endl;
+                try{
+                    int i_result = c_tree.iCalculateTreeValue(c_tree.getRoot(), variable_map);
+                    cout << S_RESULT_COMM << S_SPACE << i_result;
+                }
+                catch(invalid_argument){
+                    cout << S_DIVISION_BY_ZERO << endl;
+                }
             }
         }
 
-        if(s_command=="vars"){
+        if(s_command==S_VARS){
             set<string> variables;
             variables = c_tree.vGetUniqueVariables(c_tree.getRoot(), variables);
             if(variables.size()==0){
@@ -112,17 +118,19 @@ void CUserInterface::vRun() {
             }
         }
 
-        if(s_command=="join"){
-            CTree c_second_tree(s_operation);
-            CTree c_result_tree;
-            c_result_tree = c_tree + c_second_tree;
-            s_current_prefix = c_result_tree.sTreeToStr(c_result_tree.getRoot());
-            cout << S_PREFIX_FORM_COMM << s_current_prefix << endl;
-            c_tree = c_result_tree;
-            c_result_tree.vPrintTree();
+        if(s_command==S_JOIN){
+            if(s_operation==S_SPACE){
+                CTree c_second_tree(s_operation);
+                CTree c_result_tree;
+                c_result_tree = c_tree + c_second_tree;
+                s_current_prefix = c_result_tree.sTreeToStr(c_result_tree.getRoot());
+                cout << S_PREFIX_FORM_COMM << s_current_prefix << endl;
+                c_tree = c_result_tree;
+                c_result_tree.vPrintTree();
+            }
         }
 
-        if(s_command=="exit"){
+        if(s_command==S_EXIT){
             b_exit = true;
         }
     }while(!b_exit);

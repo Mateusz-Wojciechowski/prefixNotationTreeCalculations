@@ -1,6 +1,9 @@
 #include "COperation.h"
+#include "Constants.h"
 #include "vector"
 #include "cmath"
+#include "stdexcept"
+
 
 using namespace std;
 
@@ -25,9 +28,6 @@ int COperation::i_mul(const vector<int> &operands){
 }
 
 int COperation::i_div(const vector<int> &operands){
-    if(operands[1]==0){
-        throw exception();
-    }
     return operands[0]/operands[1];
 }
 
@@ -37,4 +37,8 @@ int COperation::i_sin(const vector<int> &operands){
 
 int COperation::i_cos(const vector<int> &operands){
     return cos(operands[0]*M_PI/180);
+}
+
+OperationFunction COperation::getOpFunction(){
+    return op_fun;
 }

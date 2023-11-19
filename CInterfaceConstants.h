@@ -10,4 +10,12 @@ const string S_RESULT_COMM = "Result: ";
 const string S_NO_VARIABLES_IN_TREE_COMM = "No variables in the tree";
 const string S_SPACE = " ";
 const string S_EMPTY_STRING = "";
+const string S_ENTER = "enter";
+const string S_PRINT = "print";
+const string S_COMP = "comp";
+const string S_VARS = "vars";
+const string S_JOIN = "join";
+const string S_EXIT = "exit";
+const string S_DIVISION_BY_ZERO = "Division by zero";
+
 #endif //LAB3_TEP_CINTERFACECONSTANTS_H

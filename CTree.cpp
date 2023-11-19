@@ -110,10 +110,10 @@ int CTree::iCalculateTreeValue(CNode *c_node, const map<string, int> &variables)
         return 0;
     }
 
-    if (c_node->getChildren().empty()) {
-        if (bIsVariable(c_node->getValue())) {
+    if (c_node->getChildren().empty()){
+        if (bIsVariable(c_node->getValue())){
             std::map<std::string, int>::const_iterator varIt = variables.find(c_node->getValue());
-            if (varIt != variables.end()) {
+            if (varIt != variables.end()){
                 return varIt->second;
             }
         }
@@ -127,8 +127,16 @@ int CTree::iCalculateTreeValue(CNode *c_node, const map<string, int> &variables)
         results.push_back(iCalculateTreeValue(*it, variables));
     }
 
-    map<string, COperation>::const_iterator op_it = operations.find(c_node->getValue());
-    return op_it->second.execute(results);
+
+    if(c_node->getValue()=="/" && results[1]==0){
+        throw invalid_argument(S_DIVISION_BY_ZERO_COMM);
+    }
+
+    else{
+        map<string, COperation>::const_iterator op_it = operations.find(c_node->getValue());
+        return op_it->second.execute(results);
+    }
+
 }
 
 void CTree::vCreateMap(){

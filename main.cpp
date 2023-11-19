@@ -31,6 +31,8 @@ int main() {
     /// sprawdzic czy nie jest wiecej danych niz zmiennych (done)
     /// comp ma nie zmieniac drzewa (done)
     /// pozmieniac ewentualne wartosci >2 na stale (done)
-    // nie bedzie dzialac jesli jedna zmienna wystapi wiecej niz jeden raz
-    // zmodyfikowac wypisywanie info o specjalnym znaku
+    /// nie bedzie dzialac jesli jedna zmienna wystapi wiecej niz jeden raz (done)
+    /// zmodyfikowac wypisywanie info o specjalnym znaku (done)
+    // wpisac enter itd jako consty
+    /// zmienic wyjatek (done)
 }

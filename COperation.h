@@ -15,6 +15,7 @@ public:
     static int i_div(const vector<int>& operands);
     static int i_sin(const vector<int>& operands);
     static int i_cos(const vector<int >& operands);
+    OperationFunction getOpFunction();
 
 private:
     OperationFunction op_fun;
