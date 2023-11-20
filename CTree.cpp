@@ -1,6 +1,6 @@
 #include "CTree.h"
 #include "CNode.h"
-#include "Constants.h"
+#include "CConstantsTree.h"
 #include "string"
 #include "iostream"
 #include "vector"
@@ -18,7 +18,7 @@ CTree::CTree(string s_prefix){
 CTree::CTree(){
     b_was_changed = false;
     int i_index = 0;
-    root = vCreateTree(" ", i_index);
+    root = vCreateTree(S_SPACE, i_index);
     vCreateMap();
 }
 
@@ -27,7 +27,7 @@ CTree::~CTree(){
 }
 
 CNode* CTree::vCreateTree(string s_prefix, int &i_index){
-    while (i_index < s_prefix.size() && s_prefix[i_index] == ' '){
+    while (i_index < s_prefix.size() && s_prefix[i_index] == C_SPACE){
         i_index++;
     }
 
@@ -36,7 +36,7 @@ CNode* CTree::vCreateTree(string s_prefix, int &i_index){
     }
 
     int i_start_index = i_index;
-    while (i_index < s_prefix.size() && s_prefix[i_index] != ' '){
+    while (i_index < s_prefix.size() && s_prefix[i_index] != C_SPACE){
         i_index++;
     }
 
@@ -56,7 +56,7 @@ CNode* CTree::vCreateTree(string s_prefix, int &i_index){
         for (int i = 0; i < operandsNeeded; i++){
             CNode* c_child = NULL;
 
-            while (i_index < s_prefix.size() && s_prefix[i_index] == ' ') {
+            while (i_index < s_prefix.size() && s_prefix[i_index] == C_SPACE) {
                 i_index++;
             }
 
@@ -65,7 +65,7 @@ CNode* CTree::vCreateTree(string s_prefix, int &i_index){
             }
 
             if (c_child == NULL) {
-                c_child = new CNode("1");
+                c_child = new CNode(S_DEFAULT_NODE_VALUE);
                 b_was_changed = true;
             }
 
@@ -77,11 +77,11 @@ CNode* CTree::vCreateTree(string s_prefix, int &i_index){
 }
 
 int CTree::getOperandsNeeded(const string op) {
-    if(op=="+" || op=="-" || op=="*" || op=="/"){
+    if(op==S_PLUS || op==S_SUB || op==S_MUL || op==S_DIV){
         return I_BINARY_OP_ARGS;
     }
 
-    if(op=="sin" || op=="cos"){
+    if(op==S_SIN || op==S_COS){
         return I_SINGLE_OP_ARGS;
     }
 
@@ -97,7 +97,7 @@ void CTree::vPrintNode(CNode* node, int i_depth) {
         return;
     }
 
-    string indent = string(i_depth * I_PRINTING_OFFSET, ' ');
+    string indent = string(i_depth * I_PRINTING_OFFSET, C_SPACE);
     cout << indent << node->getValue() << endl;
 
     for (int i=0; i<node->getChildren().size(); i++) {
@@ -112,7 +112,7 @@ int CTree::iCalculateTreeValue(CNode *c_node, const map<string, int> &variables)
 
     if (c_node->getChildren().empty()){
         if (bIsVariable(c_node->getValue())){
-            std::map<std::string, int>::const_iterator varIt = variables.find(c_node->getValue());
+            map<std::string, int>::const_iterator varIt = variables.find(c_node->getValue());
             if (varIt != variables.end()){
                 return varIt->second;
             }
@@ -128,7 +128,7 @@ int CTree::iCalculateTreeValue(CNode *c_node, const map<string, int> &variables)
     }
 
 
-    if(c_node->getValue()=="/" && results[1]==0){
+    if(c_node->getValue()==S_DIV && results[1]==0){
         throw invalid_argument(S_DIVISION_BY_ZERO_COMM);
     }
 
@@ -140,12 +140,12 @@ int CTree::iCalculateTreeValue(CNode *c_node, const map<string, int> &variables)
 }
 
 void CTree::vCreateMap(){
-    operations.insert(make_pair(string("+"), COperation(COperation::i_add)));
-    operations.insert(make_pair(string("-"), COperation(COperation::i_sub)));
-    operations.insert(make_pair(string("*"), COperation(COperation::i_mul)));
-    operations.insert(make_pair(string("/"), COperation(COperation::i_div)));
-    operations.insert(make_pair(string("sin"), COperation(COperation::i_sin)));
-    operations.insert(make_pair(string("cos"), COperation(COperation::i_cos)));
+    operations.insert(make_pair(string(S_PLUS), COperation(COperation::i_add)));
+    operations.insert(make_pair(string(S_SUB), COperation(COperation::i_sub)));
+    operations.insert(make_pair(string(S_MUL), COperation(COperation::i_mul)));
+    operations.insert(make_pair(string(S_DIV), COperation(COperation::i_div)));
+    operations.insert(make_pair(string(S_SIN), COperation(COperation::i_sin)));
+    operations.insert(make_pair(string(S_COS), COperation(COperation::i_cos)));
 }
 
 set<string> CTree::vGetUniqueVariables(CNode *c_node, set<string>& variables){
@@ -170,10 +170,10 @@ set<string> CTree::vGetUniqueVariables(CNode *c_node, set<string>& variables){
 string CTree::sTreeToStr(CNode *c_node){
     b_was_changed = false;
     if(c_node==NULL){
-        return "";
+        return S_EMPTY_STRING;
     }
 
-    string result = c_node->getValue() + " ";
+    string result = c_node->getValue() + S_SPACE;
 
     const vector<CNode*>& children = c_node->getChildren();
     for(int i=0; i<children.size(); i++){
@@ -253,7 +253,6 @@ CNode* CTree::copyTree(CNode *c_node){
 
 CTree& CTree::operator=(const CTree &c_other){
     if(this!=&c_other){
-//        vDeleteTree(root);
         root = copyTree(c_other.root);
         b_was_changed = c_other.b_was_changed;
         operations = c_other.operations;
@@ -295,7 +294,7 @@ bool CTree::bIsNum(string s_value){
 }
 
 bool CTree::bIsOperator(string s_expression) {
-   return s_expression=="+" || s_expression=="-" || s_expression=="*" || s_expression=="/" || s_expression=="sin" || s_expression=="cos";
+   return s_expression==S_PLUS || s_expression==S_SUB || s_expression==S_MUL || s_expression==S_DIV || s_expression==S_SIN || s_expression==S_COS;
 }
 
 CNode* CTree::getRoot(){

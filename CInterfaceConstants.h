@@ -17,5 +17,6 @@ const string S_VARS = "vars";
 const string S_JOIN = "join";
 const string S_EXIT = "exit";
 const string S_DIVISION_BY_ZERO = "Division by zero";
+const int I_CHAR_MISSING_VALUE = -1;
 
 #endif //LAB3_TEP_CINTERFACECONSTANTS_H

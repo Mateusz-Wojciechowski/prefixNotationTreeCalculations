@@ -27,7 +27,7 @@ void CUserInterface::vRun() {
 
         int i_space_pos = s_full_command.find(S_SPACE);
 
-        if(i_space_pos==-1){
+        if(i_space_pos==I_CHAR_MISSING_VALUE){
             s_command = s_full_command.substr(0);
             s_operation = S_EMPTY_STRING;
         }
@@ -95,7 +95,7 @@ void CUserInterface::vRun() {
                 }
                 try{
                     int i_result = c_tree.iCalculateTreeValue(c_tree.getRoot(), variable_map);
-                    cout << S_RESULT_COMM << S_SPACE << i_result;
+                    cout << S_RESULT_COMM << S_SPACE << i_result << endl;
                 }
                 catch(invalid_argument){
                     cout << S_DIVISION_BY_ZERO << endl;
@@ -119,7 +119,7 @@ void CUserInterface::vRun() {
         }
 
         if(s_command==S_JOIN){
-            if(s_operation==S_SPACE){
+            if(s_operation!=S_SPACE){
                 CTree c_second_tree(s_operation);
                 CTree c_result_tree;
                 c_result_tree = c_tree + c_second_tree;
